@@ -1,54 +1,77 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { Stack } from '@mui/material';
+import { Link, useNavigate } from 'react-router-dom';
+import { Stack, Button } from '@mui/material';
 
 import Logo from '../assets/images/Logo.png';
 
-const Navbar = () => (
-  <Stack
-    direction="row"
-    justifyContent="space-around"
-    sx={{
-      gap: { sm: '123px', xs: '40px' },
-      mt: { sm: '32px', xs: '20px' },
-      justifyContent: 'none',
-    }}
-    px="20px"
-  >
-    <Link to="/">
-      <img
-        src={Logo}
-        alt="logo"
-        style={{ width: '48px', height: '48px', margin: '0px 20px' }}
-      />
-    </Link>
+const Navbar = ({ user, setUser }) => {
+  const navigate = useNavigate();
 
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    setUser(null);
+    navigate('/');
+  };
+
+  return (
     <Stack
       direction="row"
-      gap="40px"
-      fontFamily="Alegreya"
-      fontSize="24px"
-      alignItems="flex-end"
+      justifyContent="space-between"
+      alignItems="center"
+      sx={{
+        gap: { sm: '123px', xs: '40px' },
+        mt: { sm: '32px', xs: '20px' },
+      }}
+      px="20px"
     >
-      <Link
-        to="/"
-        style={{
-          textDecoration: 'none',
-          color: '#3A1212',
-          borderBottom: '3px solid #FF2625',
-        }}
-      >
-        Главная
+      <Link to="/">
+        <img src={Logo} alt="logo" style={{ width: '48px', height: '48px' }} />
       </Link>
 
-      <a
-        href="#exercises"
-        style={{ textDecoration: 'none', color: '#3A1212' }}
-      >
-        Упражнения
-      </a>
+      <Stack direction="row" gap="40px" fontFamily="Alegreya" fontSize="20px" alignItems="center">
+        <Link to="/" style={{ textDecoration: 'none', color: '#3A1212' }}>
+          Главная
+        </Link>
+
+        <Link to="/#exercises" style={{ textDecoration: 'none', color: '#3A1212' }}>
+          Упражнения
+        </Link>
+
+        {!user && (
+          <>
+            <Link to="/login">
+              <Button variant="outlined">Войти</Button>
+            </Link>
+
+            <Link to="/register">
+              <Button variant="contained">Регистрация</Button>
+            </Link>
+          </>
+        )}
+
+        {user && (
+          <>
+            <Link to="/profile">
+              <Button variant="outlined">👤 {user.email}</Button>
+            </Link>
+
+            <Link to="/my-plan">
+              <Button variant="outlined">Мой план</Button>
+            </Link>
+
+            <Link to="/activity">
+              <Button variant="outlined">Активность</Button>
+            </Link>
+
+            <Button color="error" onClick={handleLogout}>
+              Выйти
+            </Button>
+          </>
+        )}
+      </Stack>
     </Stack>
-  </Stack>
-);
+  );
+};
 
 export default Navbar;
