@@ -1,5 +1,5 @@
-const API_URL = 'https://948536e7c2b74cad.mokky.dev';
-
+// const API_URL = 'https://948536e7c2b74cad.mokky.dev';
+const API_URL = 'https://6a29d295f59cb8f65f1da4fd.mockapi.io';
 export const getActivities = async (userId) => {
   const res = await fetch(`${API_URL}/activities?userId=${userId}`);
   return res.json();
